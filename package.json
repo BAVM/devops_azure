@@ -1,0 +1,13 @@
+{
+  "name": "devops_azure",
+  "version": "1.0.0",
+  "description": "Proyecto de ejemplo para pipeline",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
