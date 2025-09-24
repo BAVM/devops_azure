@@ -32,10 +32,3 @@ stages:
     - script: |
         npm test
       displayName: 'Run tests'
-    
-    - task: PublishTestResults@2
-      inputs:
-        testResultsFiles: '**/test-results.xml'
-        testRunTitle: 'Node.js Tests'
-      condition: succeededOrFailed()
-      displayName: 'Publish test results'
