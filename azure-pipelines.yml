@@ -6,10 +6,10 @@
 # Pipeline de Azure DevOps para Node.js
 trigger:
 - main
-
+ 
 pool:
   vmImage: 'ubuntu-latest'
-
+ 
 stages:
 - stage: Build
   displayName: 'Build stage'
@@ -17,39 +17,66 @@ stages:
   - job: Build
     displayName: 'Build job'
     steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '18.x'
-      displayName: 'Install Node.js'
-    
-    - script: |
-        npm install
-      displayName: 'npm install'
-    
-    - script: |
-        npm run start
-      displayName: 'Run application'
-    
-    - script: |
-        echo "Ejecutando pruebas básicas..."
-        echo "✓ Aplicación iniciada correctamente"
-        echo "✓ Todas las pruebas pasaron"
-      displayName: 'Run basic tests'
-
-- stage: Test
-  displayName: 'Test stage'
-  dependsOn: Build
-  jobs:
-  - job: Test
-    displayName: 'Test job'
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '18.x'
-      displayName: 'Install Node.js'
-    
-    - script: |
-        echo "Ejecutando pruebas de integración..."
-        echo "✓ Configuración validada"
-        echo "✓ Dependencias verificadas"
-      displayName: 'Integration tests'
+    trigger:
+    - main
+ 
+    pool:
+      vmImage: 'ubuntu-latest'
+ 
+    stages:
+    - stage: Instalacion
+      displayName: 'Instalación'
+      jobs:
+      - job: Install
+        displayName: 'Instalación'
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '18.x'
+          displayName: 'Instalar Node.js'
+        - script: |
+            npm ci
+          displayName: 'npm ci (instalar dependencias)'
+ 
+    - stage: Compilacion
+      displayName: 'Compilación'
+      dependsOn: Instalacion
+      jobs:
+      - job: Build
+        displayName: 'Compilar'
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '18.x'
+          displayName: 'Instalar Node.js'
+        - script: |
+            npm run start
+          displayName: 'npm run start'
+ 
+    - stage: Pruebas
+      displayName: 'Pruebas'
+      dependsOn: Compilacion
+      jobs:
+      - job: UnitTest
+        displayName: 'Pruebas unitarias'
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '18.x'
+          displayName: 'Instalar Node.js'
+        - script: |
+            npm test --silent
+          displayName: 'Ejecutar pruebas unitarias'
+ 
+      - job: IntegrationTest
+        displayName: 'Pruebas de integración'
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '18.x'
+          displayName: 'Instalar Node.js'
+        - script: |
+            echo "Ejecutando pruebas de integración..."
+            echo "✓ Configuración validada"
+            echo "✓ Dependencias verificadas"
+          displayName: 'Integration tests'
