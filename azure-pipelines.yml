@@ -24,7 +24,7 @@ stages:
         versionSpec: '18.x'
       displayName: 'Instalar Node.js'
     - script: |
-        npm ci
+        npm install
       displayName: 'npm ci (instalar dependencias)'
  
 - stage: Compilacion
@@ -41,7 +41,7 @@ stages:
         versionSpec: '18.x'
       displayName: 'Instalar Node.js'
     - script: |
-        npm run start
+        npm start
       displayName: 'npm run start'
  
 - stage: Pruebas
