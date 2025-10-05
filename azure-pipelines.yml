@@ -11,72 +11,67 @@ pool:
   vmImage: 'ubuntu-latest'
  
 stages:
-- stage: Build
-  displayName: 'Build stage'
+- stage: Instalacion
+  displayName: 'Instalación'
   jobs:
-  - job: Build
-    displayName: 'Build job'
-    steps:
-    trigger:
-    - main
- 
+  - job: Install
+    displayName: 'Instalación'
     pool:
       vmImage: 'ubuntu-latest'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Instalar Node.js'
+    - script: |
+        npm ci
+      displayName: 'npm ci (instalar dependencias)'
  
-    stages:
-    - stage: Instalacion
-      displayName: 'Instalación'
-      jobs:
-      - job: Install
-        displayName: 'Instalación'
-        steps:
-        - task: NodeTool@0
-          inputs:
-            versionSpec: '18.x'
-          displayName: 'Instalar Node.js'
-        - script: |
-            npm ci
-          displayName: 'npm ci (instalar dependencias)'
+- stage: Compilacion
+  displayName: 'Compilación'
+  dependsOn: Instalacion
+  jobs:
+  - job: Build
+    displayName: 'Compilar'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Instalar Node.js'
+    - script: |
+        npm run start
+      displayName: 'npm run start'
  
-    - stage: Compilacion
-      displayName: 'Compilación'
-      dependsOn: Instalacion
-      jobs:
-      - job: Build
-        displayName: 'Compilar'
-        steps:
-        - task: NodeTool@0
-          inputs:
-            versionSpec: '18.x'
-          displayName: 'Instalar Node.js'
-        - script: |
-            npm run start
-          displayName: 'npm run start'
+- stage: Pruebas
+  displayName: 'Pruebas'
+  dependsOn: Compilacion
+  jobs:
+  - job: UnitTest
+    displayName: 'Pruebas unitarias'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Instalar Node.js'
+    - script: |
+        npm test --silent
+      displayName: 'Ejecutar pruebas unitarias'
  
-    - stage: Pruebas
-      displayName: 'Pruebas'
-      dependsOn: Compilacion
-      jobs:
-      - job: UnitTest
-        displayName: 'Pruebas unitarias'
-        steps:
-        - task: NodeTool@0
-          inputs:
-            versionSpec: '18.x'
-          displayName: 'Instalar Node.js'
-        - script: |
-            npm test --silent
-          displayName: 'Ejecutar pruebas unitarias'
- 
-      - job: IntegrationTest
-        displayName: 'Pruebas de integración'
-        steps:
-        - task: NodeTool@0
-          inputs:
-            versionSpec: '18.x'
-          displayName: 'Instalar Node.js'
-        - script: |
-            echo "Ejecutando pruebas de integración..."
-            echo "✓ Configuración validada"
-            echo "✓ Dependencias verificadas"
-          displayName: 'Integration tests'
+  - job: IntegrationTest
+    displayName: 'Pruebas de integración'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Instalar Node.js'
+    - script: |
+        echo "Ejecutando pruebas de integración..."
+        echo "✓ Configuración validada"
+        echo "✓ Dependencias verificadas"
+      displayName: 'Integration tests'
