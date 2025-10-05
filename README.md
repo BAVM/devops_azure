@@ -1,18 +1,35 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Este proyecto es una práctica inicial con Azure DevOps.  
+Incluye repositorios Git, tableros de tareas y una pipeline de integración continua.  
+El objetivo es aprender el flujo de trabajo ágil y automatizado con DevOps.  
+Se trabajará con una aplicación de ejemplo en Node.js (o .NET Core).  
+Finalmente, se documentan los aprendizajes y dificultades encontradas.  
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Primeros Pasos
+ 
+## Prerrequisitos
+- Node.js (versión 18.x o superior)
+- npm (incluido con Node.js)
+- Git
+ 
+## Proceso de instalación
+1. Clona el repositorio:
+   ```bash
+   git clone [URL_DEL_REPOSITORIO]
+   cd ProyectoDevOps_EdwardVallejoBrianVallejo
+   ```
+ 
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+ 
+3. Ejecuta la aplicación:
+   ```bash
+   npm start
+   ```
+   La aplicación estará disponible en `http://localhost:3000`
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
 
 If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
 - [ASP.NET Core](https://github.com/aspnet/Home)
